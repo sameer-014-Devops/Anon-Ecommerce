@@ -3,7 +3,7 @@
 #Variable
   App_Name = anon
   Container_Name = ${User_Name}-${App_Name}-container
-  Default_Ver = 1.0.1
+  Default_Ver = 1.0.0
   Deploy_Name = ${User_Name}-${App_Name}-deploy
   KubeM_Pvt_IP =
   KubeW01_Pub_IP =
@@ -64,7 +64,7 @@ pipeline {
             steps {
                 cleanWs()
                 echo '########## Checking out the code ##########'
-                git 'https://github.com/sameer-014-Devops/Anon.git'
+                git 'https://github.com/sameer-014-Devops/Anon-Ecommerce.git'
             }
             post {
                 success {
@@ -167,7 +167,7 @@ pipeline {
                 //wait for 15 seconds before verifying the deployment
                 sleep 15
                 script {
-                    def response = sh(script: """curl -s -o /dev/null -w '%{http_code}'  http://$Test_Server_Pub_IP:8082""", returnStdout: true).trim()
+                    def response = sh(script: """curl -s -o /dev/null -w '%{http_code}'  http://$Test_Server_Pub_IP:8084""", returnStdout: true).trim()
                     if (response == '200') {
                         Deploy_Verify = true
                         echo '*********Test Deployment is SUCCESSFUL*********'
@@ -202,7 +202,7 @@ pipeline {
                 echo '***********Verifying By User***********'
                 
                 script{
-                    echo "The Application URL: http://$Test_Server_Pub_IP:8082"
+                    echo "The Application URL: http://$Test_Server_Pub_IP:8084"
                     // Prompt user input to verify the deployment by accessing the application URL, within 60 seconds timeout, and proceed based on the user input (Y/N), if not provided, proceed with 'Y' as default input, and if the input is 'N', then only abort the pipeline.
                     try {
                         timeout(time: 120, unit: 'SECONDS') {
