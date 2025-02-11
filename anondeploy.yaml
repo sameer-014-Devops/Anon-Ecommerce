@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: skmirza-anon-deploy
+  labels:
+    app: skmirza-anon-deploy-lb01
+spec:
+  replicas: 4
+  selector:
+    matchLabels:
+      app: skmirza-anon-app
+  template:
+    metadata:
+      labels:
+        app: skmirza-anon-app
+    spec:
+      containers:
+      - name: skmirza-anon-container
+        image: sameer014/skmirza-anon-img:latest
+        resources:
+          limits:
+            memory: "512Mi"
+            cpu: "500m"
+          requests:
+            memory: "256Mi"
+            cpu: "250m"
+        ports:
+        - containerPort: 8084
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: skmirza-anon-np-service
+  labels:
+    app: skmirza-anon-np-app
+spec:
+  selector:
+    app: skmirza-anon-app
+
+  type: NodePort
+  ports:
+  - nodePort: 30018
+    port: 8084
+    targetPort: 8084
