@@ -1,14 +1,14 @@
 /* NOTE: Make sure add the variables at node levels
 
 #Variable
-  App_Name = financeme
+  App_Name = anon
   Container_Name = ${User_Name}-${App_Name}-container
   Default_Ver = 1.0.1
   Deploy_Name = ${User_Name}-${App_Name}-deploy
   KubeM_Pvt_IP =
   KubeW01_Pub_IP =
   KubeW02_Pub_IP =
-  Prod_Workspace = /home/${User_Name}/workspace/FinanceMe_Production_Pipeline
+  Prod_Workspace = /home/${User_Name}/workspace/Anon_Production_Pipeline
   Build01_Pvt_IP =
   BN01_Path = /home/${User_Name}/workspace/${JOB_NAME}
   Test_Server_Path = /opt/tomcat/webapps/
@@ -64,7 +64,7 @@ pipeline {
             steps {
                 cleanWs()
                 echo '########## Checking out the code ##########'
-                git 'https://github.com/sameer-014-Devops/FinanceMe.git'
+                git 'https://github.com/sameer-014-Devops/Anon.git'
             }
             post {
                 success {
@@ -261,7 +261,7 @@ pipeline {
             steps{
                 sh """mkdir -p $Prod_Workspace"""
                 sh """cp -R Dockerfile *.yaml target $Prod_Workspace"""
-                echo '**********Copied the Dockerfile, financemedeploy.yaml, and target files to the Medicure Production workspace**********'
+                echo '**********Copied the Dockerfile, anondeploy.yaml, and target files to the Medicure Production workspace**********'
                 cleanWs()
                 deleteDir()
             }
@@ -269,7 +269,7 @@ pipeline {
     }
     post {
         success {
-            build job: 'FinanceMe_Production_Pipeline', parameters: [string(name: 'new_ver', value: env.new_ver)]
+            build job: 'Anon_Production_Pipeline', parameters: [string(name: 'new_ver', value: env.new_ver)]
             echo '########## Production Pipeline Triggered ##########'
         }
         failure {
