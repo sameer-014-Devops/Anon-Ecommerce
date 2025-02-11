@@ -1,14 +1,14 @@
 /* NOTE: Make sure add the variables at node levels
 
 #Variable
-  App_Name = financeme
+  App_Name = anon
   Container_Name = ${User_Name}-${App_Name}-container
   Default_Ver = 1.0.1
   Deploy_Name = ${User_Name}-${App_Name}-deploy
   KubeM_Pvt_IP =
   KubeW01_Pub_IP =
   KubeW02_Pub_IP =
-  Prod_Workspace = /home/${User_Name}/workspace/FinanceMe_Production_Pipeline
+  Prod_Workspace = /home/${User_Name}/workspace/Anon_Production_Pipeline
   Build01_Pvt_IP =
   BN01_Path = /home/${User_Name}/workspace/${JOB_NAME}
   Test_Server_Path = /opt/tomcat/webapps/
@@ -190,14 +190,14 @@ pipeline{
                     ).trim()
                     if (podExists) {
                         echo '**********Pod is already running, So Updating the Deployment**********'
-                        sh """ssh $User_Name@$KubeM_Pvt_IP kubectl apply -f financemedeploy.yaml"""
+                        sh """ssh $User_Name@$KubeM_Pvt_IP kubectl apply -f anondeploy.yaml"""
                         sleep 5
                         sh """ssh $User_Name@$KubeM_Pvt_IP kubectl set image deploy $Deploy_Name $Container_Name=$DOCKERHUB_CREDENTIALS_USR/$User_Name-$App_Name-img:${params.new_ver}"""
                         sleep 10
                         sh """ssh $User_Name@$KubeM_Pvt_IP kubectl get pods -o wide"""
                     } else {
                         echo '**********Pod is not running, So Creating the Deployment**********'
-                        sh """ssh $User_Name@$KubeM_Pvt_IP kubectl apply -f financemedeploy.yaml"""
+                        sh """ssh $User_Name@$KubeM_Pvt_IP kubectl apply -f anondeploy.yaml"""
                         sleep 5
                         sh """ssh $User_Name@$KubeM_Pvt_IP kubectl get pods -o wide"""
                     } 
@@ -222,8 +222,8 @@ pipeline{
                     }
                     echo "**********Check The Deploy in Main Server**********"
                     sleep 15
-                    echo "http://${env.KubeW01_Pub_IP}:30015"
-                    echo "http://${env.KubeW02_Pub_IP}:30015"
+                    echo "http://${env.KubeW01_Pub_IP}:30017"
+                    echo "http://${env.KubeW02_Pub_IP}:30017"
                     Deploy_Main = true
                 }
             }
